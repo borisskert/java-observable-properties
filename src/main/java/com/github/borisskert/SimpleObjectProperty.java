@@ -1,11 +1,8 @@
 package com.github.borisskert;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class SimpleObjectProperty<T> implements Property<T> {
 
-    private final List<ChangeListener<T>> listeners = new ArrayList<>();
+    private final ChangeListeners<T> listeners = new ChangeListeners<>();
 
     private T value;
 
@@ -19,7 +16,7 @@ public class SimpleObjectProperty<T> implements Property<T> {
         T oldValue = this.value;
         this.value = value;
 
-        this.listeners.forEach(listener -> listener.onChange(this, oldValue, value));
+        this.listeners.onChange(this, oldValue, value);
     }
 
     @Override
@@ -29,11 +26,11 @@ public class SimpleObjectProperty<T> implements Property<T> {
 
     @Override
     public void addListener(ChangeListener<T> listener) {
-        listeners.add(listener);
+        listeners.addListener(listener);
     }
 
     @Override
     public void removeListener(ChangeListener<T> listener) {
-        listeners.remove(listener);
+        listeners.removeListener(listener);
     }
 }
