@@ -73,4 +73,36 @@ public class SimpleObjectProperty<T> implements Property<T> {
     public void removeListener(ChangeListener<T> listener) {
         listeners.removeListener(listener);
     }
+
+    /* *****************************************************************************************************************
+     * Overrides of Object
+     **************************************************************************************************************** */
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+
+        if(getClass() == o.getClass()) {
+            SimpleObjectProperty<?> that = (SimpleObjectProperty<?>) o;
+            return value.equals(that.value);
+        }
+
+        if(o instanceof Property) {
+            Property<?> that = (Property<?>) o;
+            return value.equals(that.get());
+        }
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
+    }
+
+    @Override
+    public String toString() {
+        return "<" + value + '>';
+    }
 }

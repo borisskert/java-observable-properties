@@ -7,6 +7,8 @@ import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsEqual.equalTo;
 
 class SimpleOptionalPropertyTest {
 
@@ -152,5 +154,89 @@ class SimpleOptionalPropertyTest {
         assertThat(listenerTwo.property, is(sameInstance(property)));
         assertThat(listenerTwo.oldValue, is(sameInstance(abcObject)));
         assertThat(listenerTwo.newValue, is(sameInstance(xyzObject)));
+    }
+
+    @Test
+    public void shouldEqualPropertyWithSameValue() throws Exception {
+        Property<TestObject> anotherProperty = new SimpleOptionalProperty<>(abcObject);
+
+        assertThat(anotherProperty, is(equalTo(property)));
+        assertThat(property, is(equalTo(anotherProperty)));
+    }
+
+    @Test
+    public void shouldProvideSameHashCodeAsPropertyWithSameValue() throws Exception {
+        Property<TestObject> anotherProperty = new SimpleOptionalProperty<>(abcObject);
+
+        assertThat(anotherProperty.hashCode(), is(equalTo(property.hashCode())));
+    }
+
+    @Test
+    public void shouldEqualEmptyProperty() throws Exception {
+        Property<TestObject> anotherProperty = new SimpleOptionalProperty<>();
+
+        assertThat(anotherProperty, is(equalTo(emptyProperty)));
+        assertThat(emptyProperty, is(equalTo(anotherProperty)));
+    }
+
+    @Test
+    public void shouldProvideSameHashCodeAsEmptyProperty() throws Exception {
+        Property<TestObject> anotherProperty = new SimpleOptionalProperty<>();
+
+        assertThat(anotherProperty.hashCode(), is(equalTo(emptyProperty.hashCode())));
+    }
+
+    @Test
+    public void shouldEqualOptionalPropertyWithEqualValue() throws Exception {
+        Property<TestObject> anotherProperty = new SimpleOptionalProperty<>(new TestObject("abc"));
+
+        assertThat(anotherProperty, is(equalTo(property)));
+        assertThat(property, is(equalTo(anotherProperty)));
+    }
+
+    @Test
+    public void shouldProvideSameHashCodeAsNonOptionalPropertyWithEqualValue() throws Exception {
+        Property<TestObject> anotherProperty = new SimpleObjectProperty<>(new TestObject("abc"));
+
+        assertThat(anotherProperty.hashCode(), is(equalTo(property.hashCode())));
+    }
+
+    @Test
+    public void shouldEqualNonOptionalPropertyWithEqualValue() throws Exception {
+        Property<TestObject> anotherProperty = new SimpleObjectProperty<>(new TestObject("abc"));
+
+        assertThat(property, is(equalTo(anotherProperty)));
+    }
+
+    @Test
+    public void shouldProvideSameHashCodeAsPropertyWithEqualValue() throws Exception {
+        Property<TestObject> anotherProperty = new SimpleOptionalProperty<>(new TestObject("abc"));
+
+        assertThat(anotherProperty.hashCode(), is(equalTo(property.hashCode())));
+    }
+
+    @Test
+    public void shouldNotEqualPropertyWithAnotherValue() throws Exception {
+        Property<TestObject> anotherProperty = new SimpleOptionalProperty<>(new TestObject("xyz"));
+
+        assertThat(anotherProperty, is(not(equalTo(property))));
+        assertThat(property, is(not(equalTo(anotherProperty))));
+    }
+
+    @Test
+    public void shouldNotProvideSameHashCodeAsPropertyWithAnotherValue() throws Exception {
+        Property<TestObject> anotherProperty = new SimpleOptionalProperty<>(new TestObject("xyz"));
+
+        assertThat(anotherProperty.hashCode(), is(not(equalTo(property.hashCode()))));
+    }
+
+    @Test
+    public void shouldProvideStringRepresentation() throws Exception {
+        assertThat(property.toString(), is(equalTo("<TestObject{text='abc'}>")));
+    }
+
+    @Test
+    public void shouldProvideStringRepresentationForEmptyProperty() throws Exception {
+        assertThat(emptyProperty.toString(), is(equalTo("<null>")));
     }
 }
