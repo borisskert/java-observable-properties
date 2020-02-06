@@ -1,23 +1,8 @@
 package com.github.borisskert;
 
-public class LongProperty implements Property<Long> {
-    @Override
-    public void set(Long value) {
+public class LongProperty extends SimpleObjectProperty<Long> {
 
-    }
-
-    @Override
-    public Long get() {
-        return null;
-    }
-
-    @Override
-    public void addListener(ChangeListener<Long> listener) {
-
-    }
-
-    @Override
-    public void removeListener(ChangeListener<Long> listener) {
-
+    public LongProperty(long value) {
+        super(value);
     }
 }

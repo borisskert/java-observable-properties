@@ -1,23 +1,8 @@
 package com.github.borisskert;
 
-public class BooleanProperty implements Property<Boolean> {
-    @Override
-    public void set(Boolean value) {
+public class BooleanProperty extends SimpleObjectProperty<Boolean> {
 
-    }
-
-    @Override
-    public Boolean get() {
-        return null;
-    }
-
-    @Override
-    public void addListener(ChangeListener<Boolean> listener) {
-
-    }
-
-    @Override
-    public void removeListener(ChangeListener<Boolean> listener) {
-
+    public BooleanProperty(boolean value) {
+        super(value);
     }
 }
