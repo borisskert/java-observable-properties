@@ -74,6 +74,16 @@ class SimpleObjectPropertyTest {
     }
 
     @Test
+    public void shouldNotProvideChangesToAddedListenerIfNoActualChanges() throws Exception {
+        TestChangeListener<TestObject> listener = new TestChangeListener<>();
+        property.addListener(listener);
+
+        property.set(abcObject);
+
+        assertThat(listener.calls, is(equalTo(0)));
+    }
+
+    @Test
     public void shouldProvideTwoChangesToAddedListener() throws Exception {
         TestChangeListener<TestObject> listener = new TestChangeListener<>();
         property.addListener(listener);

@@ -1,5 +1,7 @@
 package com.github.borisskert;
 
+import java.util.Objects;
+
 public class SimpleObjectProperty<T> implements Property<T> {
 
     /* *****************************************************************************************************************
@@ -32,10 +34,12 @@ public class SimpleObjectProperty<T> implements Property<T> {
 
     @Override
     public void set(T value) {
-        T oldValue = this.value;
-        this.value = value;
+        if(! Objects.equals(this.value, value)) {
+            T oldValue = this.value;
+            this.value = value;
 
-        this.listeners.onChange(this, oldValue, value);
+            this.listeners.onChange(this, oldValue, value);
+        }
     }
 
     @Override
