@@ -9,12 +9,16 @@ import static org.hamcrest.Matchers.*;
 
 class SimpleObjectPropertyTest {
 
+    private Property<TestObject> emptyProperty;
     private Property<TestObject> property;
+
     private TestObject abcObject;
     private TestObject xyzObject;
 
     @BeforeEach
     public void setup() throws Exception {
+        emptyProperty = new SimpleObjectProperty<>();
+
         abcObject = new TestObject("abc");
         property = new SimpleObjectProperty<>(abcObject);
 
@@ -22,8 +26,19 @@ class SimpleObjectPropertyTest {
     }
 
     @Test
+    public void shouldProvideNullValueIfEmpty() throws Exception {
+        assertThat(emptyProperty.get(), is(nullValue()));
+    }
+
+    @Test
     public void shouldProvideValue() throws Exception {
         assertThat(property.get(), is(equalTo(abcObject)));
+    }
+
+    @Test
+    public void shouldProvideModifiedValueIfWasEmpty() throws Exception {
+        emptyProperty.set(abcObject);
+        assertThat(emptyProperty.get(), is(equalTo(abcObject)));
     }
 
     @Test
@@ -43,6 +58,19 @@ class SimpleObjectPropertyTest {
         assertThat(listener.property, is(sameInstance(property)));
         assertThat(listener.oldValue, is(sameInstance(abcObject)));
         assertThat(listener.newValue, is(sameInstance(xyzObject)));
+    }
+
+    @Test
+    public void shouldProvideChangesOfEmptyPropertyToAddedListener() throws Exception {
+        TestChangeListener<TestObject> listener = new TestChangeListener<>();
+        emptyProperty.addListener(listener);
+
+        emptyProperty.set(abcObject);
+
+        assertThat(listener.calls, is(equalTo(1)));
+        assertThat(listener.property, is(sameInstance(emptyProperty)));
+        assertThat(listener.oldValue, is(nullValue()));
+        assertThat(listener.newValue, is(sameInstance(abcObject)));
     }
 
     @Test

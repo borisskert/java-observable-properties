@@ -6,6 +6,9 @@ public class SimpleObjectProperty<T> implements Property<T> {
 
     private T value;
 
+    public SimpleObjectProperty() {
+        this.value = null;
+    }
 
     public SimpleObjectProperty(T value) {
         this.value = value;
