@@ -1,4 +1,4 @@
-package com.github.borisskert;
+package com.github.borisskert.observableproperties;
 
 public class OptionalLongProperty extends SimpleOptionalProperty<Long> {
 

@@ -1,39 +1,28 @@
-package com.github.borisskert;
+package com.github.borisskert.observableproperties;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Optional;
-
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.sameInstance;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.jupiter.api.Assertions.fail;
 
-class SimpleOptionalPropertyTest {
 
-    private OptionalProperty<TestObject> emptyProperty;
-    private OptionalProperty<TestObject> property;
+class SimpleObjectPropertyTest {
+
+    private Property<TestObject> property;
 
     private TestObject abcObject;
     private TestObject xyzObject;
 
     @BeforeEach
     public void setup() throws Exception {
-        emptyProperty = new SimpleOptionalProperty<>();
-
         abcObject = new TestObject("abc");
-        property = new SimpleOptionalProperty<>(abcObject);
+        property = new SimpleObjectProperty<>(abcObject);
 
         xyzObject = new TestObject("xyz");
-    }
-
-    @Test
-    public void shouldProvideNullValueIfEmpty() throws Exception {
-        assertThat(emptyProperty.get(), is(nullValue()));
-    }
-
-    @Test
-    public void shouldProvideEmptyOptional() throws Exception {
-        assertThat(emptyProperty.asOptional().isPresent(), is(false));
     }
 
     @Test
@@ -42,34 +31,9 @@ class SimpleOptionalPropertyTest {
     }
 
     @Test
-    public void shouldProvideValueAsOptional() throws Exception {
-        Optional<TestObject> asOptional = property.asOptional();
-        assertThat(asOptional.isPresent(), is(equalTo(true)));
-        assertThat(asOptional.get(), is(equalTo(abcObject)));
-    }
-
-    @Test
-    public void shouldProvideModifiedValueIfWasEmpty() throws Exception {
-        emptyProperty.set(abcObject);
-        assertThat(emptyProperty.get(), is(equalTo(abcObject)));
-    }
-
-    @Test
     public void shouldProvideModifiedValue() throws Exception {
         property.set(xyzObject);
         assertThat(property.get(), is(equalTo(xyzObject)));
-    }
-
-    @Test
-    public void shouldProvideNullValueIfModifiedToNull() throws Exception {
-        property.set(null);
-        assertThat(property.get(), is(nullValue()));
-    }
-
-    @Test
-    public void shouldProvideEmptyIfModifiedToNull() throws Exception {
-        property.set(null);
-        assertThat(property.asOptional().isPresent(), is(equalTo(false)));
     }
 
     @Test
@@ -83,19 +47,6 @@ class SimpleOptionalPropertyTest {
         assertThat(listener.property, is(sameInstance(property)));
         assertThat(listener.oldValue, is(sameInstance(abcObject)));
         assertThat(listener.newValue, is(sameInstance(xyzObject)));
-    }
-
-    @Test
-    public void shouldProvideChangesOfEmptyPropertyToAddedListener() throws Exception {
-        TestChangeListener<TestObject> listener = new TestChangeListener<>();
-        emptyProperty.addListener(listener);
-
-        emptyProperty.set(abcObject);
-
-        assertThat(listener.calls, is(equalTo(1)));
-        assertThat(listener.property, is(sameInstance(emptyProperty)));
-        assertThat(listener.oldValue, is(nullValue()));
-        assertThat(listener.newValue, is(sameInstance(abcObject)));
     }
 
     @Test
@@ -152,5 +103,25 @@ class SimpleOptionalPropertyTest {
         assertThat(listenerTwo.property, is(sameInstance(property)));
         assertThat(listenerTwo.oldValue, is(sameInstance(abcObject)));
         assertThat(listenerTwo.newValue, is(sameInstance(xyzObject)));
+    }
+
+    @Test
+    public void shouldNotAllowToInitializeWithNullValue() throws Exception {
+        try {
+            new SimpleObjectProperty<>(null);
+            fail("Should throw NullPointerException");
+        } catch (NullPointerException e) {
+            assertThat(e.getMessage(), is(equalTo("Parameter 'value' must not be null")));
+        }
+    }
+
+    @Test
+    public void shouldNotAllowToSetNullValue() throws Exception {
+        try {
+            property.set(null);
+            fail("Should throw NullPointerException");
+        } catch (NullPointerException e) {
+            assertThat(e.getMessage(), is(equalTo("Parameter 'value' must not be null")));
+        }
     }
 }

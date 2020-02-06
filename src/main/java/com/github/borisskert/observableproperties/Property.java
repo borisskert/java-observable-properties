@@ -1,4 +1,4 @@
-package com.github.borisskert;
+package com.github.borisskert.observableproperties;
 
 public interface Property<T> extends ReadonlyProperty<T> {
 
