@@ -2,6 +2,12 @@ package com.github.borisskert.observableproperties;
 
 import java.util.Objects;
 
+/**
+ * Implements a generic property type which contains any type of value.
+ * Attention: this property cannot be null. For a optional value consider to use {@link SimpleOptionalProperty}.
+ *
+ * @param <T> the value type.
+ */
 public class SimpleObjectProperty<T> implements Property<T> {
 
     /* *****************************************************************************************************************
@@ -20,6 +26,11 @@ public class SimpleObjectProperty<T> implements Property<T> {
      * Constructor(s)
      **************************************************************************************************************** */
 
+    /**
+     * Creates an instance of a {@link SimpleObjectProperty}
+     *
+     * @param value the initial value which cannot be null
+     */
     public SimpleObjectProperty(T value) {
         Objects.requireNonNull(value, "Parameter 'value' must not be null");
 
@@ -30,6 +41,12 @@ public class SimpleObjectProperty<T> implements Property<T> {
      * Implementation of Property<T>
      **************************************************************************************************************** */
 
+    /**
+     * Changes the value of this {@link Property} which cannot be set to {@code null}.
+     * Consider to use {@link SimpleOptionalProperty} type for optional values.
+     *
+     * @param value the new value which cannot be {@code null}.
+     */
     @Override
     public void set(T value) {
         Objects.requireNonNull(value, "Parameter 'value' must not be null");

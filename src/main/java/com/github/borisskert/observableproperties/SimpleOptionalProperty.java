@@ -3,6 +3,11 @@ package com.github.borisskert.observableproperties;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * Implements an optional {@link Property} which may contain a {@code null} value.
+ *
+ * @param <T> the value type
+ */
 public class SimpleOptionalProperty<T> implements OptionalProperty<T> {
 
     /* *****************************************************************************************************************
@@ -21,9 +26,17 @@ public class SimpleOptionalProperty<T> implements OptionalProperty<T> {
      * Constructor(s)
      **************************************************************************************************************** */
 
+    /**
+     * Creates an empty {@link Property}
+     */
     public SimpleOptionalProperty() {
     }
 
+    /**
+     * Creates a {@link Property} with a initial value which may be {@code null}.
+     *
+     * @param value the initial value wich may be {@code null}
+     */
     public SimpleOptionalProperty(T value) {
         this.value = value;
     }
@@ -34,7 +47,7 @@ public class SimpleOptionalProperty<T> implements OptionalProperty<T> {
 
     @Override
     public void set(T value) {
-        if(! Objects.equals(this.value, value)) {
+        if (!Objects.equals(this.value, value)) {
             T oldValue = this.value;
             this.value = value;
 
