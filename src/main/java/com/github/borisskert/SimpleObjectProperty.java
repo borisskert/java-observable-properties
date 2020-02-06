@@ -20,11 +20,9 @@ public class SimpleObjectProperty<T> implements Property<T> {
      * Constructor(s)
      **************************************************************************************************************** */
 
-    public SimpleObjectProperty() {
-        this.value = null;
-    }
-
     public SimpleObjectProperty(T value) {
+        Objects.requireNonNull(value, "Parameter 'value' must not be null");
+
         this.value = value;
     }
 
@@ -34,7 +32,9 @@ public class SimpleObjectProperty<T> implements Property<T> {
 
     @Override
     public void set(T value) {
-        if(! Objects.equals(this.value, value)) {
+        Objects.requireNonNull(value, "Parameter 'value' must not be null");
+
+        if (!Objects.equals(this.value, value)) {
             T oldValue = this.value;
             this.value = value;
 
