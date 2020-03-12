@@ -22,6 +22,8 @@ public class SimpleObjectProperty<T> implements Property<T> {
 
     private T value;
 
+    private BoundProperties<T> boundProperties = new BoundProperties<>();
+
     /* *****************************************************************************************************************
      * Constructor(s)
      **************************************************************************************************************** */
@@ -56,6 +58,8 @@ public class SimpleObjectProperty<T> implements Property<T> {
             this.value = value;
 
             this.listeners.onChange(this, oldValue, value);
+
+            this.boundProperties.setValue(value);
         }
     }
 
@@ -74,6 +78,16 @@ public class SimpleObjectProperty<T> implements Property<T> {
         listeners.removeListener(listener);
     }
 
+    @Override
+    public void bind(Property<T> property) {
+        this.boundProperties.bind(property);
+    }
+
+    @Override
+    public void unbind(Property<T> boundProperty) {
+        this.boundProperties.unbind(boundProperty);
+    }
+
     /* *****************************************************************************************************************
      * Overrides of Object
      **************************************************************************************************************** */
@@ -83,12 +97,12 @@ public class SimpleObjectProperty<T> implements Property<T> {
         if (this == o) return true;
         if (o == null) return false;
 
-        if(getClass() == o.getClass()) {
+        if (getClass() == o.getClass()) {
             SimpleObjectProperty<?> that = (SimpleObjectProperty<?>) o;
             return value.equals(that.value);
         }
 
-        if(o instanceof Property) {
+        if (o instanceof Property) {
             Property<?> that = (Property<?>) o;
             return value.equals(that.get());
         }

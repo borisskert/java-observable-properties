@@ -186,4 +186,114 @@ class SimpleObjectPropertyTest {
     public void shouldProvideStringRepresentation() throws Exception {
         assertThat(property.toString(), is(equalTo("<TestObject{text='abc'}>")));
     }
+
+    @Test
+    public void shouldNotChangeValueOfBoundPropertyWhileBind() throws Exception {
+        String originalValue = "bound property";
+        TestObject testObject = new TestObject(originalValue);
+        SimpleObjectProperty<TestObject> boundProperty = new SimpleObjectProperty<>(testObject);
+        TestChangeListener<TestObject> boundPropertyListener = new TestChangeListener<>();
+        boundProperty.addListener(boundPropertyListener);
+
+        property.bind(boundProperty);
+
+        assertThat(boundProperty.get(), is(equalTo(testObject)));
+        assertThat(boundPropertyListener.calls, is(equalTo(0)));
+    }
+
+    @Test
+    public void shouldChangeValueOfBoundPropertyWhenChangeOriginalProperty() throws Exception {
+        String originalValue = "bound property";
+        TestObject testObject = new TestObject(originalValue);
+        SimpleObjectProperty<TestObject> boundProperty = new SimpleObjectProperty<>(testObject);
+        TestChangeListener<TestObject> boundPropertyListener = new TestChangeListener<>();
+        boundProperty.addListener(boundPropertyListener);
+
+        property.bind(boundProperty);
+        TestObject changedProperty = new TestObject("changed property");
+        property.set(changedProperty);
+
+        assertThat(boundProperty.get(), is(equalTo(changedProperty)));
+        assertThat(boundPropertyListener.calls, is(equalTo(1)));
+        assertThat(boundPropertyListener.newValue, is(equalTo(changedProperty)));
+        assertThat(boundPropertyListener.oldValue, is(equalTo(testObject)));
+        assertThat(boundPropertyListener.property, is(sameInstance(boundProperty)));
+    }
+
+    @Test
+    public void shouldNotChangeValueOfUnboundPropertyWhenChangeOriginalProperty() throws Exception {
+        String originalValue = "bound property";
+        TestObject testObject = new TestObject(originalValue);
+        SimpleObjectProperty<TestObject> boundProperty = new SimpleObjectProperty<>(testObject);
+        TestChangeListener<TestObject> boundPropertyListener = new TestChangeListener<>();
+        boundProperty.addListener(boundPropertyListener);
+
+        property.bind(boundProperty);
+        property.unbind(boundProperty);
+
+        TestObject changedProperty = new TestObject("changed property");
+        property.set(changedProperty);
+
+        assertThat(boundProperty.get(), is(equalTo(testObject)));
+        assertThat(boundPropertyListener.calls, is(equalTo(0)));
+    }
+
+    @Test
+    public void shouldChangeValueOfBoundPropertiesWhenChangeOriginalProperty() throws Exception {
+        TestObject originalTestObjectOne = new TestObject("bound property 1");
+        SimpleObjectProperty<TestObject> boundPropertyOne = new SimpleObjectProperty<>(originalTestObjectOne);
+        TestObject originalTestObjectTwo = new TestObject("bound property 2");
+        SimpleObjectProperty<TestObject> boundPropertyTwo = new SimpleObjectProperty<>(originalTestObjectTwo);
+        TestChangeListener<TestObject> boundPropertyListenerOne = new TestChangeListener<>();
+        TestChangeListener<TestObject> boundPropertyListenerTwo = new TestChangeListener<>();
+
+        boundPropertyOne.addListener(boundPropertyListenerOne);
+        boundPropertyTwo.addListener(boundPropertyListenerTwo);
+
+        property.bind(boundPropertyOne);
+        property.bind(boundPropertyTwo);
+        TestObject changedProperty = new TestObject("changed property");
+        property.set(changedProperty);
+
+        assertThat(boundPropertyOne.get(), is(equalTo(changedProperty)));
+        assertThat(boundPropertyListenerOne.calls, is(equalTo(1)));
+        assertThat(boundPropertyListenerOne.newValue, is(equalTo(changedProperty)));
+        assertThat(boundPropertyListenerOne.oldValue, is(equalTo(originalTestObjectOne)));
+        assertThat(boundPropertyListenerOne.property, is(sameInstance(boundPropertyOne)));
+
+        assertThat(boundPropertyTwo.get(), is(equalTo(changedProperty)));
+        assertThat(boundPropertyListenerTwo.calls, is(equalTo(1)));
+        assertThat(boundPropertyListenerTwo.newValue, is(equalTo(changedProperty)));
+        assertThat(boundPropertyListenerTwo.oldValue, is(equalTo(originalTestObjectTwo)));
+        assertThat(boundPropertyListenerTwo.property, is(sameInstance(boundPropertyTwo)));
+    }
+
+
+    @Test
+    public void shouldNotChangeValueOfUnboundPropertiesWhenChangeOriginalProperty() throws Exception {
+        TestObject originalTestObjectOne = new TestObject("bound property 1");
+        SimpleObjectProperty<TestObject> boundPropertyOne = new SimpleObjectProperty<>(originalTestObjectOne);
+        TestObject originalTestObjectTwo = new TestObject("bound property 2");
+        SimpleObjectProperty<TestObject> boundPropertyTwo = new SimpleObjectProperty<>(originalTestObjectTwo);
+        TestChangeListener<TestObject> boundPropertyListenerOne = new TestChangeListener<>();
+        TestChangeListener<TestObject> boundPropertyListenerTwo = new TestChangeListener<>();
+
+        boundPropertyOne.addListener(boundPropertyListenerOne);
+        boundPropertyTwo.addListener(boundPropertyListenerTwo);
+
+        property.bind(boundPropertyOne);
+        property.bind(boundPropertyTwo);
+        TestObject changedProperty = new TestObject("changed property");
+        property.unbind(boundPropertyOne);
+        property.set(changedProperty);
+
+        assertThat(boundPropertyOne.get(), is(equalTo(originalTestObjectOne)));
+        assertThat(boundPropertyListenerOne.calls, is(equalTo(0)));
+
+        assertThat(boundPropertyTwo.get(), is(equalTo(changedProperty)));
+        assertThat(boundPropertyListenerTwo.calls, is(equalTo(1)));
+        assertThat(boundPropertyListenerTwo.newValue, is(equalTo(changedProperty)));
+        assertThat(boundPropertyListenerTwo.oldValue, is(equalTo(originalTestObjectTwo)));
+        assertThat(boundPropertyListenerTwo.property, is(sameInstance(boundPropertyTwo)));
+    }
 }

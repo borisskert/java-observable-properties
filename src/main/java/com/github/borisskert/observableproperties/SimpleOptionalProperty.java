@@ -22,6 +22,8 @@ public class SimpleOptionalProperty<T> implements OptionalProperty<T> {
 
     private T value;
 
+    private final BoundProperties<T> boundProperties = new BoundProperties<>();
+
     /* *****************************************************************************************************************
      * Constructor(s)
      **************************************************************************************************************** */
@@ -52,6 +54,8 @@ public class SimpleOptionalProperty<T> implements OptionalProperty<T> {
             this.value = value;
 
             this.listeners.onChange(this, oldValue, value);
+
+            this.boundProperties.setValue(value);
         }
     }
 
@@ -68,6 +72,20 @@ public class SimpleOptionalProperty<T> implements OptionalProperty<T> {
     @Override
     public void removeListener(ChangeListener<T> listener) {
         listeners.removeListener(listener);
+    }
+
+    @Override
+    public void bind(Property<T> property) {
+        if (!(property instanceof OptionalProperty)) {
+            throw new IllegalArgumentException("You cannot bind a non-optional Property to an OptionalProperty");
+        }
+
+        this.boundProperties.bind(property);
+    }
+
+    @Override
+    public void unbind(Property<T> boundProperty) {
+        this.boundProperties.unbind(boundProperty);
     }
 
     @Override

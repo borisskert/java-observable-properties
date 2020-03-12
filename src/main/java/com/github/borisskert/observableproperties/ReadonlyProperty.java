@@ -1,7 +1,7 @@
 package com.github.borisskert.observableproperties;
 
 /**
- * Restricting interfact which represents an observable {@link Property} without providing any method to change the value.
+ * Restricting interface which represents an observable {@link Property} without providing any method to change the value.
  *
  * @param <T> the value type
  */
@@ -27,4 +27,18 @@ public interface ReadonlyProperty<T> {
      * @param listener to be removed
      */
     void removeListener(ChangeListener<T> listener);
+
+    /**
+     * Binds a {@link Property} to this {@link Property} instance
+     *
+     * @param property the {@link Property} instance to be bound
+     */
+    void bind(Property<T> property);
+
+    /**
+     * Unbinds a {@link Property} from this {@link Property} instance
+     *
+     * @param boundProperty the {@link Property} instance to be unbound
+     */
+    void unbind(Property<T> boundProperty);
 }
