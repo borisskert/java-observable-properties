@@ -73,6 +73,18 @@ property.addListener((property, oldValue, newValue) -> {
 property.removeListener(listener);
 ```
 
+#### Bind a Property
+
+```
+property.bind(anotherProperty);
+```
+
+#### Unbind a Property
+
+```
+property.unbind(boundProperty);
+```
+
 ### Typed properties
 
 #### String
