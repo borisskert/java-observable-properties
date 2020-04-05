@@ -2,6 +2,17 @@
 
 This project contains properties which are able to notify registered listeners about changes.
 
+## Usage
+
+Insert dependency into your maven `pom.xml`:
+```xml
+<dependency>
+  <groupId>de.borisskert</groupId>
+  <artifactId>java-observable-properties</artifactId>
+  <version>0.1.0-17</version>
+</dependency>
+```
+
 ## Simple object properties
 
 Simple properties are forced to contain a value. For optional values consider to use an `OptionalProperty` instance.
