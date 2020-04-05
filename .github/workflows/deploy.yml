@@ -21,7 +21,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mkdir -p ~/.m2
-          echo "<settings><servers><server><id>github</id><username>borisskert</username><password>${GITHUB_TOKEN}</password></server></servers></settings>" > ~/.m2/settings.xml
+          echo "<settings><server><id>sonatype-nexus-staging</id><username>${OSS_SONATYPE_ORG_USERNAME}</username><password>${OSS_SONATYPE_ORG_PASSWORD}</password></server></servers></settings>" > ~/.m2/settings.xml
 
           GITHUB_TAG=${GITHUB_REF#refs/tags/}
           GITHUB_VERSION=${GITHUB_TAG#"v"}
