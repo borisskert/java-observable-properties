@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.borisskert</groupId>
+    <groupId>de.borisskert</groupId>
     <artifactId>java-observable-properties</artifactId>
     <version>0.1.0-SNAPSHOT</version>
 
@@ -38,14 +38,39 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.0</version>
             </plugin>
+
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.8</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>sonatype-nexus-staging</serverId>
+                    <nexusUrl>https://oss.sonatype.org/service/local/staging/deploy/maven2/</nexusUrl>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
     <distributionManagement>
         <repository>
-            <id>github</id>
-            <name>GitHub borisskert Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/borisskert/java-observable-properties</url>
+            <id>sonatype-nexus-staging</id>
+            <name>Nexus Release Repository</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
+
+    <scm>
+        <url>https://github.com/borisskert/java-observable-properties</url>
+        <connection>scm:git:git://github.com/borisskert/java-observable-properties.git</connection>
+        <developerConnection>scm:git:git@github.com:borisskert/java-observable-properties.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
 </project>
